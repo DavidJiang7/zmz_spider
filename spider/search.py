@@ -47,6 +47,12 @@ class Search():
                         sr['Title'] = span.text.strip()
                         sr['MagnetUrl'] = li.get('data-magnet', '')
                         sr['Ed2kUrl'] = li.get('data-ed2k', '')
+                        if sr['MagnetUrl'].find("magnet:") == -1:
+                            sr['MagnetUrl'] = ''
+                        if sr['Ed2kUrl'].find("ed2k:") == -1:
+                            sr['Ed2kUrl'] = ''
+                        if sr['MagnetUrl'] == '' and sr['Ed2kUrl'] == '':
+                            continue
                         print(sr)
                         result.append(sr)
                         self.insert(sr)
