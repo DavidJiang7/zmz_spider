@@ -135,9 +135,10 @@ class ZMZManager(ZMZDBConnect):
         try:
             with self.open_connection() as conn:
                 with conn.cursor() as cur:
-                    cur.execute("""update ResourceLink set Title='{title}', MagnetUrl='{m}', Ed2kUrl='{e}' where id={id}""".format(item['Title'].replace("'", "''").replace("@", "@@"), m=item['MagnetUrl'].replace("'", "''").replace("@", "@@"), e=item['Ed2kUrl'].replace("'", "''").replace("@", "@@")))
+                    cur.execute("""update ResourceLink set Title='{title}', MagnetUrl='{m}', Ed2kUrl='{e}' where id={id}""".format(title=item['Title'].replace("'", "''").replace("@", "@@"), m=item['MagnetUrl'].replace("'", "''").replace("@", "@@"), e=item['Ed2kUrl'].replace("'", "''").replace("@", "@@"), id=item['Id']))
         except Exception as e:
-            logging.error(e)
+            #logging.error(e)
+            pass
 
 
 class RedisManager(RedisConnect):

@@ -1,9 +1,10 @@
 import pdb, json, random, time, traceback
 from datetime import datetime
 from utils.http import Http
-from bs4 import BeautifulSoup
+from lxml import etree
 from model.items import SearchResult
 from storage.manager import ZMZManager
+from urllib import parse
 
 
 class Search():
@@ -22,6 +23,7 @@ class Search():
                 for res in resources:
                     k = []
                     k.append(res['NameCN'])
+                    k.append(res['NameEN'])
                     self.get(res['Id'], k)
                     time.sleep(random.randint(5, 10))
             if len(resources) < pageSize:
@@ -33,20 +35,21 @@ class Search():
         while True:
             try:
                 #pdb.set_trace()
-                url = self.url.format(keyword='+'.join(keyword_array), page=page)
+                url = self.url.format(keyword=parse.quote(' '.join(keyword_array),encoding='utf-8'), page=page)
+                print("当前搜索url：" + url)
                 html = self.Http.get_html(url)
-                bs = BeautifulSoup(html, features='lxml')
-                link_list = bs.find_all('ul', class_='link-list')
+                tree = etree.HTML(html)
+                link_list = tree.xpath('//div[@class="link-list-wrapper"]/ul[@class="link-list"]/li[@data-id]')
                 if link_list and len(link_list) > 0:
                     for link in link_list:
-                        li = link.find('li')
-                        span = link.find('span', class_='name')
+                        # pdb.set_trace()
+                        span = link.xpath('./span[@class="name"]')
                         sr = SearchResult()
                         sr['ResourceId'] = resouceId
-                        sr['LinkId'] = int(li.get('data-id', '0'))
-                        sr['Title'] = span.text.strip()
-                        sr['MagnetUrl'] = li.get('data-magnet', '')
-                        sr['Ed2kUrl'] = li.get('data-ed2k', '')
+                        sr['LinkId'] = int(link.get('data-id', '0'))
+                        sr['Title'] = span[0].text.strip()
+                        sr['MagnetUrl'] = link.get('data-magnet', '')
+                        sr['Ed2kUrl'] = link.get('data-ed2k', '')
                         if sr['MagnetUrl'].find("magnet:") == -1:
                             sr['MagnetUrl'] = ''
                         if sr['Ed2kUrl'].find("ed2k:") == -1:
@@ -71,6 +74,7 @@ class Search():
         if info is None:
             self.ZMZManager.insert_resource_link(item)
         else:
+            item['Id'] = info['Id']
             self.ZMZManager.update_resource_link(item)
 
         
