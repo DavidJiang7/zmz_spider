@@ -43,7 +43,7 @@ class Character(scrapy.Item):
     NameEN = scrapy.Field()
     Url = scrapy.Field()
     
-class SearchResult(scrapy.Item):
+class ResourceLink(scrapy.Item):
     Id = scrapy.Field()
     ResourceId = scrapy.Field()
     LinkId = scrapy.Field()

@@ -1,7 +1,7 @@
-import requests, logging, time, pdb, random
+import requests, logging, time, pdb, random, traceback
 from datetime import datetime
-from storage.manager import ZMZManager
 from bs4 import BeautifulSoup
+from storage.manager import ZMZManager
 from utils.http import UrlTool, Http
 from model.items import Resource, ResourceProp, Character, ResourceCharacter
 
@@ -24,7 +24,7 @@ USER_AGENT_LIST = [
     "Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11"
 ]
 
-class Spider():
+class zmz_list_spider():
     domain = 'http://www.zmz2019.com'
 
     def __init__(self, name=None, **kwargs):
@@ -121,8 +121,8 @@ class Spider():
             print('资源',res)
             self.ZMZManager.insert_resource(res)
             self.get_resource_prop(ul_li, res['Id'])
-        except Exception as e:            
-            logging.error(e)
+        except Exception as e: 
+            traceback.print_exc() # 打印错误代码行 
             pass
 
     def get_resource_prop(self, ul_li, resourceId):

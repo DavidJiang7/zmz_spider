@@ -26,6 +26,22 @@ COOKIES = [
 class Http():
      
     def get_html(self, url):
+        try:
+            return self.__request(url)
+        except:            
+            traceback.print_exc() # 打印错误代码行
+            print('出现异常，休息一会儿......')
+            time.sleep(random.randint(600, 1800))   # 暂停10~30分钟，然后再尝试一次
+            try:
+                print('重试请求......')
+                return self.__request(url)
+            except:
+                print('出现异常，休息一会儿......')
+                time.sleep(1800)   # 暂停30分钟
+                return ''
+
+                
+    def __request(self, url):
         headers = {
             'User-Agent': random.choice(USER_AGENT_LIST),
             'Cookie': random.choice(COOKIES),
@@ -34,6 +50,7 @@ class Http():
         response = requests.get(url, headers=headers)
         response.encoding ='utf-8'
         return response.text
+
 
 
 

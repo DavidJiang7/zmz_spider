@@ -1,9 +1,9 @@
-from spider.list import Spider
-from spider.search import Search
+from spider.zmz_list_spider import zmz_list_spider
+from spider.zmz_link_search_spider import zmz_link_search_spider
 from utils.http import UrlTool
 
 # 增量爬取资源
-s = Spider()
+s = zmz_list_spider()
 s.go()
 input()
 

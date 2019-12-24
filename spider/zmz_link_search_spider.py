@@ -2,12 +2,12 @@ import pdb, json, random, time, traceback
 from datetime import datetime
 from utils.http import Http
 from lxml import etree
-from model.items import SearchResult
+from model.items import ResourceLink
 from storage.manager import ZMZManager
 from urllib import parse
 
 
-class Search():
+class zmz_link_search_spider():
     def __init__(self):
         self.url = 'http://oabt007.com/index/index/k/{keyword}/p/{page}'
         self.Http = Http()
@@ -44,7 +44,7 @@ class Search():
                     for link in link_list:
                         # pdb.set_trace()
                         span = link.xpath('./span[@class="name"]')
-                        sr = SearchResult()
+                        sr = ResourceLink()
                         sr['ResourceId'] = resouceId
                         sr['LinkId'] = int(link.get('data-id', '0'))
                         sr['Title'] = span[0].text.strip()
