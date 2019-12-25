@@ -39,6 +39,14 @@ class ZMZManager(ZMZDBConnect):
                     cur.execute('update Resource set status=1,updatetime=getdate() where id=%s', (id,))
         except Exception as e:
             logging.error(e)
+            
+    def update_resource(self, item):
+        try:
+            with self.open_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute('update Resource set NameCN= %s,NameEN= %s,OtherName= %s,PlayStatus= %s,Explain= %s,ImgLink= %s,Level= %s,Url= %s,Description= %s,Score= %s,Channel= %s,RSSUrl= %s,UpdateTime=getdate() where id=%s', (item['NameCN'],item['NameEN'],item['OtherName'],item['PlayStatus'],item['Explain'],item['ImgLink'],item['Level'],item['Url'],item['Description'],item['Score'],item['Channel'],item['RSSUrl'],item['Id']))
+        except Exception as e:
+            logging.error(e)
 
     def is_exist_resource(self, id):
         try:

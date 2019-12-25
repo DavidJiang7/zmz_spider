@@ -22,8 +22,8 @@ class zmz_link_search_spider():
             else:
                 for res in resources:
                     k = []
-                    k.append(res['NameCN'])
-                    k.append(res['NameEN'])
+                    k.append(res['NameCN'].replace('/', ' '))
+                    k.append(res['NameEN'].replace('/', ' '))
                     self.get(res['Id'], k)
                     time.sleep(random.randint(5, 10))
             if len(resources) < pageSize:

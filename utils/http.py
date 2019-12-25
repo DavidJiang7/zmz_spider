@@ -30,13 +30,16 @@ class Http():
             return self.__request(url)
         except:            
             traceback.print_exc() # 打印错误代码行
+            secends = random.randint(600, 1800)
             print('出现异常，休息一会儿......')
-            time.sleep(random.randint(600, 1800))   # 暂停10~30分钟，然后再尝试一次
+            print(str(secends) + '秒后继续')
+            time.sleep(secends)   # 暂停10~30分钟，然后再尝试一次
             try:
                 print('重试请求......')
                 return self.__request(url)
             except:
                 print('出现异常，休息一会儿......')
+                print('30分钟后继续')
                 time.sleep(1800)   # 暂停30分钟
                 return ''
 
@@ -47,7 +50,7 @@ class Http():
             'Cookie': random.choice(COOKIES),
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3'
         }
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=(10, 15)) # 超时元组，10指的是连接超时10秒，15指的是读取超时15秒，若只是一个数字，则默认连接超时和读取超时都是该值
         response.encoding ='utf-8'
         return response.text
 

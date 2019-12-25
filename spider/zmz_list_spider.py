@@ -119,7 +119,11 @@ class zmz_list_spider():
             else:
                 res['RSSUrl'] =  rss['href']
             print('资源',res)
-            self.ZMZManager.insert_resource(res)
+            if self.ZMZManager.is_exist_resource(res['Id']) == True:
+                # 更新
+                self.ZMZManager.update_resource(res)
+            else:
+                self.ZMZManager.insert_resource(res)
             self.get_resource_prop(ul_li, res['Id'])
         except Exception as e: 
             traceback.print_exc() # 打印错误代码行 
