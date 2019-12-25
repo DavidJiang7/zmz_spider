@@ -118,8 +118,9 @@ class zmz_list_spider():
                 if rss is None:
                     res['RSSUrl'] = ''
                 else:
-                    res['RSSUrl'] =  rss['href']
+                    res['RSSUrl'] = rss['href']
             except:
+                res['RSSUrl'] = ''
                 pass
             print('资源',res)
             if self.ZMZManager.is_exist_resource(res['Id']) == True:
