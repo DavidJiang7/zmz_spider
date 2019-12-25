@@ -113,11 +113,14 @@ class zmz_list_spider():
             res['CreateTime'] = datetime.now()
             res['UpdateTime'] = datetime.now()
             res['Channel'] = channel
-            rss = div_tit.find('h2').find('a')
-            if rss is None:
-                res['RSSUrl'] = ''
-            else:
-                res['RSSUrl'] =  rss['href']
+            try:
+                rss = div_tit.find('h2').find('a')
+                if rss is None:
+                    res['RSSUrl'] = ''
+                else:
+                    res['RSSUrl'] =  rss['href']
+            except:
+                pass
             print('资源',res)
             if self.ZMZManager.is_exist_resource(res['Id']) == True:
                 # 更新
