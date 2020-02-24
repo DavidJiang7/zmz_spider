@@ -50,3 +50,17 @@ class ResourceLink(scrapy.Item):
     Title = scrapy.Field()
     MagnetUrl = scrapy.Field()
     Ed2kUrl = scrapy.Field()
+    
+class ResourceBase(scrapy.Item):
+    Id = scrapy.Field()
+    Code = scrapy.Field()
+    PCApi = scrapy.Field()
+    MApi = scrapy.Field()
+    NameCN = scrapy.Field()
+    NameEN = scrapy.Field()
+    OtherName = scrapy.Field()
+    Channel = scrapy.Field()
+    ChannelCN = scrapy.Field()
+    Area = scrapy.Field()
+    ShowType = scrapy.Field()
+    Views = scrapy.Field()
