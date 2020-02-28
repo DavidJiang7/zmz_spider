@@ -3,10 +3,11 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from storage.manager import ZMZManager
 from utils.http import UrlTool, Http
+from lxml import etree
 from model.items import Resource, ResourceProp, Character, ResourceCharacter
 
 class zmz_list_spider():
-    domain = 'http://www.zmz2019.com'
+    domain = 'http://www.rrys2019.com'
 
     def __init__(self, name=None, **kwargs):
         self.ZMZManager = ZMZManager()
@@ -25,22 +26,25 @@ class zmz_list_spider():
             time.sleep(30)
 
     def spider_list(self, html, channel_list_obj):
-        bs = BeautifulSoup(html, features='lxml')
-        divs = bs.find('div', class_='resource-showlist')
-        lis = divs.find_all('li', class_='clearfix')
+        tree = etree.HTML(html)
+        lis = tree.xpath('//div[contains(@class,"resource-showlist")]/ul/li[@class="clearfix"]')
         if lis and len(lis) > 0:
             for li in lis:
-                a = li.find('a')
-                span = a.find('span')
-                id = int(a['href'].rsplit('/', 1)[1])
+                # pdb.set_trace()
+                a = li.xpath('./div[@class="fl-img"]/a[@href]')[0]
+                span = a.xpath('./span[contains(@class,"point")]')[0]
+                score = ''.join(span.xpath('.//text()')).replace('"', '')
+                href = a.get('href', '')
+                id = int(href.rsplit('/', 1)[1])
                 # if self.ZMZManager.is_exist_resource(id) == True:
                 #     continue
                 # else:
                 #     self.spider_resource(a['href'], span.text.replace('"', ''), channel_list_obj['Channel']) 
-                self.spider_resource(a['href'], span.text.replace('"', ''), channel_list_obj['Channel'])       
+                self.spider_resource(href, score, channel_list_obj['Channel'])       
                 time.sleep(3)        
 
     def spider_resource(self, url, score, channel):
+        # pdb.set_trace()
         print(url, score)
         url = self.domain + url
         html = self.Http.get_html(url)
