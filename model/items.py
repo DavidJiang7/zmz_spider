@@ -64,3 +64,5 @@ class ResourceBase(scrapy.Item):
     Area = scrapy.Field()
     ShowType = scrapy.Field()
     Views = scrapy.Field()
+    Status = scrapy.Field()
+    UpdateTime = scrapy.Field()

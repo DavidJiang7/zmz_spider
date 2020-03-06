@@ -4,7 +4,8 @@ from bs4 import BeautifulSoup
 from storage.manager import ZMZManager
 from utils.http import UrlTool, Http
 from lxml import etree
-from model.items import Resource, ResourceProp, Character, ResourceCharacter
+from model.items import Resource, ResourceProp, Character, ResourceCharacter, ResourceBase
+from spider.zmz_link_spider import zmz_link_spider
 
 class zmz_list_spider():
     domain = 'http://www.rrys2019.com'
@@ -12,6 +13,7 @@ class zmz_list_spider():
     def __init__(self, name=None, **kwargs):
         self.ZMZManager = ZMZManager()
         self.Http = Http()
+        self.ZMZLinkSpider = zmz_link_spider()
 
     def go(self):
         channel_list = self.ZMZManager.get_channel_list()
@@ -21,11 +23,11 @@ class zmz_list_spider():
             # print(it)
             #time.sleep(10) #停顿10秒
             html = self.Http.get_html(it['Url'])
-            self.spider_list(html, it)
+            self.spider_list(html, it['Channel'])
             self.ZMZManager.update_channel_list(it['Id'])
             time.sleep(30)
 
-    def spider_list(self, html, channel_list_obj):
+    def spider_list(self, html, channel):
         tree = etree.HTML(html)
         lis = tree.xpath('//div[contains(@class,"resource-showlist")]/ul/li[@class="clearfix"]')
         if lis and len(lis) > 0:
@@ -40,9 +42,10 @@ class zmz_list_spider():
                 #     continue
                 # else:
                 #     self.spider_resource(a['href'], span.text.replace('"', ''), channel_list_obj['Channel']) 
-                self.spider_resource(href, score, channel_list_obj['Channel'])       
+                self.spider_resource(href, score, channel)       
                 time.sleep(3)        
 
+    # 获取资源基础信息
     def spider_resource(self, url, score, channel):
         # pdb.set_trace()
         print(url, score)
@@ -113,11 +116,13 @@ class zmz_list_spider():
                 self.ZMZManager.update_resource(res)
             else:
                 self.ZMZManager.insert_resource(res)
-            self.get_resource_prop(ul_li, res['Id'])
+            self.get_resource_prop(ul_li, res['Id']) # 解析属性
+            self.ZMZLinkSpider.get_resource_base(html, res['Id']) # 解析资源code
         except Exception as e: 
             traceback.print_exc() # 打印错误代码行 
             pass
-
+    
+    # 获取资源属性
     def get_resource_prop(self, ul_li, resourceId):
         need = ['原名','地区','语言','首播','电视台','类型','别名']
         mult = ['编剧','編劇','导演','主演']
@@ -149,6 +154,7 @@ class zmz_list_spider():
                     logging.error(e)
                     pass    
 
+    # 保存创作阵容
     def get_resource_character(self, prop_name, a_tags, resourceId):
         if a_tags and len(a_tags) > 0:
             for a in a_tags:

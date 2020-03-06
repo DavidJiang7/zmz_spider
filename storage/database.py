@@ -15,7 +15,7 @@ class ZMZDBConnect:
 
     def insert_data(self,item:...,table_name:str):
         '''
-        插入SKU基础信息表
+        指定表插入数据
         '''
         try:
             with self.open_connection() as conn :

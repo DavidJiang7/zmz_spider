@@ -10,3 +10,4 @@
 */__pycache__
 Pipfile.lock
 /node_modules
+/utils/User Data
