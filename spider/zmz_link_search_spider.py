@@ -70,7 +70,7 @@ class zmz_link_search_spider():
             except:
                 traceback.print_exc() # 打印错误代码行
                 time.sleep(random.randint(300, 600))     
-        self.ZMZManager.update_resource_status(resouceId)   
+        self.ZMZManager.update_resource_status(resouceId, 1)   
         return result
 
     def insert(self, item):

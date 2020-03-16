@@ -4,9 +4,10 @@ from bs4 import BeautifulSoup
 from storage.manager import ZMZManager
 from utils.http import UrlTool, Http
 from lxml import etree
-from model.items import Resource, ResourceProp, Character, ResourceCharacter, ResourceBase
+from model.items import Resource, ResourceProp, Character, ResourceCharacter
 from spider.zmz_link_spider import zmz_link_spider
 
+# 字幕组->资源库->资源列表爬取
 class zmz_list_spider():
     domain = 'http://www.rrys2019.com'
 

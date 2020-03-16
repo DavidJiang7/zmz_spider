@@ -20,7 +20,20 @@ class ZMZManager(ZMZDBConnect):
             return []
 
     def get_resource(self, pageSize):
-        sql = """select top {size} * from Resource where status = 0""".format(size=pageSize)
+        sql = """select top {size} * from Resource where status = 0 """.format(size=pageSize)
+        try:
+            with self.open_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute(sql)
+                    _rows = cur.fetchall()
+                    columns = [col[0] for col in cur.description]
+                    return [ { k:v for k,v in zip(columns, row) } for row in _rows]
+        except Exception as e:
+            logging.error(e)
+            return []
+
+    def get_resource_base(self, pageSize):
+        sql = """select top {size} * from ResourceBase where status = 0 """.format(size=pageSize)
         try:
             with self.open_connection() as conn:
                 with conn.cursor() as cur:
@@ -32,11 +45,27 @@ class ZMZManager(ZMZDBConnect):
             logging.error(e)
             return []
             
-    def update_resource_status(self, id):
+    def update_resource_status(self, id, status):
         try:
             with self.open_connection() as conn:
                 with conn.cursor() as cur:
-                    cur.execute('update Resource set status=1,updatetime=getdate() where id=%s', (id,))
+                    cur.execute('update Resource set status=%s,updatetime=getdate() where id=%s', (status,id,))
+        except Exception as e:
+            logging.error(e)
+                   
+    def update_resource_base_status(self, id, status):
+        try:
+            with self.open_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute('update ResourceBase set status=%s,updatetime=getdate() where id=%s', (status,id,))
+        except Exception as e:
+            logging.error(e)
+
+    def update_resource_base_json(self, id, json):
+        try:
+            with self.open_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute('update ResourceBase set LinkJson=%s,updatetime=getdate() where id=%s', (json,id,))
         except Exception as e:
             logging.error(e)
             

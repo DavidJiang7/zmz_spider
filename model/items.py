@@ -66,3 +66,4 @@ class ResourceBase(scrapy.Item):
     Views = scrapy.Field()
     Status = scrapy.Field()
     UpdateTime = scrapy.Field()
+    LinkJson = scrapy.Field()
