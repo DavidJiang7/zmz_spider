@@ -19,7 +19,7 @@ class zmz_link_json_spider():
             else:
                 for res in resources:
                     # html = self.Http.get_html(res['Url'])
-                    html = self.WebSelenium.get_html(res['MApi'])
+                    html = self.Http.get_html(res['MApi'])
                     if html is None or html == '':
                         print(resourceId, '被屏蔽，后续可重试...')
                         # 0-未更新json，1-完成解析，2-正在解析json，3-解析json异常，4-被屏蔽拿不到json

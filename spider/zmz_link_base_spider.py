@@ -25,13 +25,16 @@ class zmz_link_base_spider():
                 for res in resources:
                     # html = self.Http.get_html(res['Url'])
                     html = self.WebSelenium.get_html(res['Url'])
+                    # pdb.set_trace()
                     if html is None or html == '':
-                        print(resourceId, '被屏蔽，后续可重试...')
+                        print(res['Id'], '被屏蔽，后续可重试...')
                         self.ZMZManager.update_resource_status(res['Id'], 2)   # 被屏蔽，可重试
                         continue
                     self.get_resource_base(html, res['Id'])
                     secends = random.randint(1, 10)
                     time.sleep(secends)
+                    
+            # time.sleep(300) # 每20条停5分钟
             if len(resources) < pageSize:
                 break
         
@@ -63,7 +66,7 @@ class zmz_link_base_spider():
                     rb['MApi'] = self.m_api_url.format(code=code)
                     print(rb)
                     self.ZMZManager.insert_data(rb, 'ResourceBase')                    
-                    self.ZMZManager.update_resource_status(res['Id'], 1)   # 成功
+                    self.ZMZManager.update_resource_status(resourceId, 1)   # 成功
                 else:
                     # 未知情况
-                    self.ZMZManager.update_resource_status(res['Id'], 5)   # 未知情况
+                    self.ZMZManager.update_resource_status(resourceId, 5)   # 未知情况

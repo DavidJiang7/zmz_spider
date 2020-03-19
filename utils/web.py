@@ -34,10 +34,10 @@ class WebSelenium():
 
     def init_driver(self):
         options = webdriver.ChromeOptions()
-        options.add_argument('--ignore-certificate-errors')  # 忽略证书验证错误
         options.add_argument("--user-data-dir="+"F:\\py\\zmz_spider\\utils\\User Data") # 加载用户缓存信息
         options.add_extension('F:\\py\\zmz_spider\\utils\\AdblockPlus2.crx') # 安装屏蔽广告插件
         options.add_experimental_option('excludeSwitches', ['enable-automation'])
+        options.add_argument('--ignore-certificate-errors')  # 忽略证书验证错误
         self.driver = webdriver.Chrome('F:\\py\\zmz_spider\\utils\\chromedriver.exe', options = options)
         # self.driver.implicitly_wait(3) # 只等待页面10秒
         self.driver.set_page_load_timeout(30) # 页面加载等待超时

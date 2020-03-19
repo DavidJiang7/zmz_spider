@@ -48,6 +48,7 @@ class Http():
         headers = {
             'User-Agent': random.choice(USER_AGENT_LIST),
             'Cookie': random.choice(COOKIES),
+            'Content-Type': 'application/json; charset=utf-8',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3'
         }
         response = requests.get(url, headers=headers, timeout=(10, 15)) # 超时元组，10指的是连接超时10秒，15指的是读取超时15秒，若只是一个数字，则默认连接超时和读取超时都是该值
