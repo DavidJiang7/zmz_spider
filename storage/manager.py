@@ -68,6 +68,14 @@ class ZMZManager(ZMZDBConnect):
                     cur.execute('update ResourceBase set LinkJson=%s,updatetime=getdate() where id=%s', (json,id,))
         except Exception as e:
             logging.error(e)
+
+    def update_resource_base(self, item):
+        try:
+            with self.open_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute('update ResourceBase set NameCN=%s,NameEN=%s,OtherName=%s,Channel=%s,ChannelCN=%s,Area=%s,ShowType=%s,Views=%s,Status=%s,LinkJson=%s,updatetime=getdate() where id=%s', (item['NameCN'],item['NameEN'],item['OtherName'],item['Channel'],item['ChannelCN'],item['Area'],item['ShowType'],item['Views'],item['Status'],item['LinkJson'],item['Id'],))
+        except Exception as e:
+            logging.error(e)
             
     def update_resource(self, item):
         try:
