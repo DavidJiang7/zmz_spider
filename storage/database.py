@@ -30,8 +30,8 @@ class ZMZDBConnect:
 
 class RedisConnect:
     def __init__(self, *args, **kwargs):
-        self.host = '101.71.85.20'
-        self.password = 'asdf1234@'
+        self.host = ''
+        self.password = ''
         self.db = 1
         self.port = 63791
         self.pool = redis.ConnectionPool(host=self.host,port=self.port,db=self.db,password=self.password)
